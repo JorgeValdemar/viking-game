@@ -230,6 +230,7 @@
 		AC7428D21C8B049600F9E396 /* SoundFXPuf.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AC7428B71C8B049500F9E396 /* SoundFXPuf.mp3 */; };
 		AC7428D51C8B1A2400F9E396 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428D41C8B1A2400F9E396 /* Player.swift */; };
 		AC7428D91C8B1B0500F9E396 /* Axe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428D81C8B1B0500F9E396 /* Axe.swift */; };
+		AC9BF1D21C94852D00B78FD7 /* ScoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF1D11C94852D00B78FD7 /* ScoreHelper.swift */; };
 		ACED97341C94672D0000BD7C /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACED97331C94672D0000BD7C /* Enemy.swift */; };
 /* End PBXBuildFile section */
 
@@ -664,6 +665,7 @@
 		AC7428B71C8B049500F9E396 /* SoundFXPuf.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = SoundFXPuf.mp3; sourceTree = "<group>"; };
 		AC7428D41C8B1A2400F9E396 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		AC7428D81C8B1B0500F9E396 /* Axe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Axe.swift; sourceTree = "<group>"; };
+		AC9BF1D11C94852D00B78FD7 /* ScoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreHelper.swift; sourceTree = "<group>"; };
 		ACED97331C94672D0000BD7C /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -708,6 +710,7 @@
 				1255543819C0A00E00EC663C /* SoundPlayHelper.swift */,
 				1255543A19C0C3B100EC663C /* DelayHelper.swift */,
 				1255542F19C09C9E00EC663C /* StateMachine.swift */,
+				AC9BF1D11C94852D00B78FD7 /* ScoreHelper.swift */,
 			);
 			name = TSTUtils;
 			path = Classes/TSTUtils;
@@ -1641,7 +1644,7 @@
 			attributes = {
 				LastSwiftMigration = 0720;
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Flameworks;
 				TargetAttributes = {
 					1293CCAB19C08A25006A0E25 = {
@@ -1751,6 +1754,7 @@
 				1293CD6019C08A25006A0E25 /* CCParallaxNode.m in Sources */,
 				1255542319C08DC000EC663C /* Main.swift in Sources */,
 				1293CDF319C08A26006A0E25 /* ccUtils.c in Sources */,
+				AC9BF1D21C94852D00B78FD7 /* ScoreHelper.swift in Sources */,
 				1293CD5019C08A25006A0E25 /* CCLayoutBox.m in Sources */,
 				1293CDA919C08A25006A0E25 /* CCTexture.m in Sources */,
 				1293CDFB19C08A26006A0E25 /* CGPointExtension.m in Sources */,
@@ -1922,7 +1926,9 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					DEBUG,
@@ -1957,6 +1963,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					NDEBUG,
 					"NS_BLOCK_ASSERTIONS=1",
@@ -1994,6 +2001,7 @@
 				INFOPLIST_FILE = CocosSwift/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.flameworks.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CocosSwift/CocosSwift-Bridging-Header.h";
@@ -2022,6 +2030,7 @@
 				INFOPLIST_FILE = CocosSwift/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.flameworks.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CocosSwift/CocosSwift-Bridging-Header.h";
