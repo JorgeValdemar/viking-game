@@ -1,29 +1,17 @@
 //
-//  EnemyPeixe.swift
-//  CocosSwift
-//
-//  Created by Usuário Convidado on 05/03/16.
-//  Copyright © 2016 Flameworks. All rights reserved.
-//
-
-import Foundation
-
-//
 //  Enemy.swift
 //  CocosSwift
 //
-//  Created by Usuário Convidado on 05/03/16.
+//  Created by Usuário Convidado on 12/03/16.
 //  Copyright © 2016 Flameworks. All rights reserved.
 //
 
 import Foundation
 
-import Foundation
+class Enemy : CCSprite {
 
-class PirataPeixe : CCSprite {
-    
     var life:CGFloat = 3.0
-    var speed:CGFloat = 6.0
+    var speed:CGFloat = 7.0
     
     override init() {
         super.init()
@@ -37,8 +25,8 @@ class PirataPeixe : CCSprite {
         self.physicsBody.elasticity = 0.1
         self.physicsBody.mass = 100.0
         self.physicsBody.density = 100.0
-        self.physicsBody.collisionType = "EnemyPeixe"
-        self.physicsBody.collisionCategories = ["EnemyPeixe"]
+        self.physicsBody.collisionType = "Enemy"
+        self.physicsBody.collisionCategories = ["Enemy"]
         self.physicsBody.collisionMask = ["Axe"]
     }
     

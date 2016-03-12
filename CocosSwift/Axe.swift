@@ -20,9 +20,6 @@ class Axe : CCSprite {
     
     override init(imageNamed imageName: String!) {
         super.init(imageNamed: imageName)
-        
-     
-        
     }
     
     override init(CGImage image: CGImage!, key: String!) {
@@ -49,7 +46,6 @@ class Axe : CCSprite {
        self.init(imageNamed: imageName)
         
         self.damage = andDamage
-        
         
         // Configuracoes default
         self.physicsBody = CCPhysicsBody(rect: CGRectMake(0, 0, self.contentSize.width, self.contentSize.height), cornerRadius: 0.0)

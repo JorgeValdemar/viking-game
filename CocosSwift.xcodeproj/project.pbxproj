@@ -229,9 +229,8 @@
 		AC7428D11C8B049600F9E396 /* SoundFXButtonTap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AC7428B61C8B049500F9E396 /* SoundFXButtonTap.mp3 */; };
 		AC7428D21C8B049600F9E396 /* SoundFXPuf.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AC7428B71C8B049500F9E396 /* SoundFXPuf.mp3 */; };
 		AC7428D51C8B1A2400F9E396 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428D41C8B1A2400F9E396 /* Player.swift */; };
-		AC7428D71C8B1AE100F9E396 /* PirataPerneta.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428D61C8B1AE100F9E396 /* PirataPerneta.swift */; };
 		AC7428D91C8B1B0500F9E396 /* Axe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428D81C8B1B0500F9E396 /* Axe.swift */; };
-		AC7428DB1C8B208C00F9E396 /* PirataPeixe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428DA1C8B208C00F9E396 /* PirataPeixe.swift */; };
+		ACED97341C94672D0000BD7C /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACED97331C94672D0000BD7C /* Enemy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -664,9 +663,8 @@
 		AC7428B61C8B049500F9E396 /* SoundFXButtonTap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = SoundFXButtonTap.mp3; sourceTree = "<group>"; };
 		AC7428B71C8B049500F9E396 /* SoundFXPuf.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = SoundFXPuf.mp3; sourceTree = "<group>"; };
 		AC7428D41C8B1A2400F9E396 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
-		AC7428D61C8B1AE100F9E396 /* PirataPerneta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PirataPerneta.swift; sourceTree = "<group>"; };
 		AC7428D81C8B1B0500F9E396 /* Axe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Axe.swift; sourceTree = "<group>"; };
-		AC7428DA1C8B208C00F9E396 /* PirataPeixe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PirataPeixe.swift; sourceTree = "<group>"; };
+		ACED97331C94672D0000BD7C /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1594,9 +1592,8 @@
 			isa = PBXGroup;
 			children = (
 				AC7428D41C8B1A2400F9E396 /* Player.swift */,
-				AC7428D61C8B1AE100F9E396 /* PirataPerneta.swift */,
-				AC7428DA1C8B208C00F9E396 /* PirataPeixe.swift */,
 				AC7428D81C8B1B0500F9E396 /* Axe.swift */,
+				ACED97331C94672D0000BD7C /* Enemy.swift */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -1792,6 +1789,7 @@
 				1293CD8119C08A25006A0E25 /* CCProgressNode.m in Sources */,
 				12F88AE819DDA1D20001531E /* CCEffectRenderer.m in Sources */,
 				12F88AEA19DDA1D20001531E /* CCEffectStack.m in Sources */,
+				ACED97341C94672D0000BD7C /* Enemy.swift in Sources */,
 				1293CD8D19C08A25006A0E25 /* CCResponderManager.m in Sources */,
 				1293CDBF19C08A26006A0E25 /* CCTransition.m in Sources */,
 				12F88AE319DDA1D20001531E /* CCEffectGlass.m in Sources */,
@@ -1802,7 +1800,6 @@
 				1293CE1C19C08A26006A0E25 /* OALUtilityActions.m in Sources */,
 				1293CD5419C08A25006A0E25 /* CCMotionStreak.m in Sources */,
 				1293CE5E19C08A26006A0E25 /* NSMutableArray+WeakReferences.m in Sources */,
-				AC7428D71C8B1AE100F9E396 /* PirataPerneta.swift in Sources */,
 				1293CE4C19C08A26006A0E25 /* OpenALManager.m in Sources */,
 				1293CDBC19C08A26006A0E25 /* CCTMXXMLParser.m in Sources */,
 				1293CDF119C08A26006A0E25 /* CCProfiling.m in Sources */,
@@ -1857,7 +1854,6 @@
 				1293CE3219C08A26006A0E25 /* ALCaptureDevice.m in Sources */,
 				1293CDB619C08A26006A0E25 /* CCTiledMapLayer.m in Sources */,
 				1293CDED19C08A26006A0E25 /* CCColor.m in Sources */,
-				AC7428DB1C8B208C00F9E396 /* PirataPeixe.swift in Sources */,
 				1293CD0719C08A25006A0E25 /* CCShader.m in Sources */,
 				12F88ADE19DDA1D20001531E /* CCEffect.m in Sources */,
 				1293CD2919C08A25006A0E25 /* CCAnimation.m in Sources */,

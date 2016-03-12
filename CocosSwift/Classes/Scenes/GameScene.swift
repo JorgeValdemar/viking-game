@@ -58,7 +58,9 @@ class GameScene: CCScene {
         
         //Habilita o toque na tela
         self.userInteractionEnabled = true
-    
+        
+        createEnemys()
+        
 	}
     
     override func touchBegan(touch: UITouch!, withEvent event: UIEvent!) {
@@ -146,5 +148,60 @@ class GameScene: CCScene {
         return finalVelocity
     
     }
+    
+    //Cria aleatoriamente os inimigos
+    func createEnemys(){
+        
+        let enemyIndex:Int = Int(arc4random_uniform(10))
+        
+        if(enemyIndex <= 7){
+            
+            var enemy:Enemy = self.createEnemyWithAnimation(10001, plistName: "PirataPerneta-ipad.plist", textureFile: "PirataPerneta-ipad.png")
+            self.addChild(enemy)
+            
+        }else{
+            
+            var enemy:Enemy = self.createEnemyWithAnimation(20001, plistName: "PirataPeixe-ipad.plist", textureFile: "PirataPeixe-ipad.png")
+            self.addChild(enemy)
+            
+        }
+    }
+    
+    func createEnemyWithAnimation(indexImage:Int, plistName:String, textureFile:String) -> Enemy{
+        
+        CCSpriteFrameCache.sharedSpriteFrameCache().addSpriteFramesWithFile(plistName, textureFilename: textureFile)
+        var animFrames:Array<CCSpriteFrame> = Array()
+        
+        for (var i = indexImage; i <= indexImage+17; i++) {
+            let name:String = "Pirata \(i).png"
+            let pirataPernetaFrame:CCSpriteFrame = CCSpriteFrame.frameWithImageNamed(name) as! CCSpriteFrame
+            animFrames.append(pirataPernetaFrame)
+        }
+        
+        //Cria as acoes
+        let animation:CCAnimation = CCAnimation(spriteFrames: animFrames, delay: 0.06)
+        let animationAction:CCActionAnimate = CCActionAnimate(animation: animation)
+        let actionForever:CCActionRepeatForever = CCActionRepeatForever(action: animationAction)
+        let ccFrameName:CCSpriteFrame = CCSpriteFrame.frameWithImageNamed("Pirata \(indexImage).png") as! CCSpriteFrame
+        let enemy:Enemy = Enemy.spriteWithSpriteFrame(ccFrameName) as! Enemy
+        
+        //Cria o ponto Y aleatorio
+        let minScreenY:CGFloat = enemy.boundingBox().size.height
+        let maxScreenY:UInt32 = UInt32(screenSize.height - (enemy.boundingBox().size.height + minScreenY))
+        let yPosition:CGFloat = minScreenY + CGFloat(arc4random_uniform(maxScreenY))
+        
+        //Cria o movimento
+        let finalPoint:CGPoint = CGPointMake(0.0, yPosition)
+        let moveTo:CCAction = CCActionMoveTo.actionWithDuration(6.0, position: finalPoint) as! CCAction
+        
+        //Atribui os valores ao enemy
+        enemy.position = CGPointMake(512.0, yPosition)
+        enemy.anchorPoint = CGPointMake(0.5, 0.5)
+        enemy.runAction(actionForever)
+        enemy.runAction(moveTo)
+        
+        return enemy
+    }
+    
     
 }
