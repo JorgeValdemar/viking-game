@@ -230,7 +230,12 @@
 		AC7428D21C8B049600F9E396 /* SoundFXPuf.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AC7428B71C8B049500F9E396 /* SoundFXPuf.mp3 */; };
 		AC7428D51C8B1A2400F9E396 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428D41C8B1A2400F9E396 /* Player.swift */; };
 		AC7428D91C8B1B0500F9E396 /* Axe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428D81C8B1B0500F9E396 /* Axe.swift */; };
+<<<<<<< Updated upstream
 		ACED97341C94672D0000BD7C /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACED97331C94672D0000BD7C /* Enemy.swift */; };
+=======
+		AC7428DB1C8B208C00F9E396 /* PirataPeixe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428DA1C8B208C00F9E396 /* PirataPeixe.swift */; };
+		ACC30FD11C947DE7000CBDA6 /* ScoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC30FD01C947DE7000CBDA6 /* ScoreHelper.swift */; };
+>>>>>>> Stashed changes
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -664,7 +669,12 @@
 		AC7428B71C8B049500F9E396 /* SoundFXPuf.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = SoundFXPuf.mp3; sourceTree = "<group>"; };
 		AC7428D41C8B1A2400F9E396 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		AC7428D81C8B1B0500F9E396 /* Axe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Axe.swift; sourceTree = "<group>"; };
+<<<<<<< Updated upstream
 		ACED97331C94672D0000BD7C /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
+=======
+		AC7428DA1C8B208C00F9E396 /* PirataPeixe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PirataPeixe.swift; sourceTree = "<group>"; };
+		ACC30FD01C947DE7000CBDA6 /* ScoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreHelper.swift; sourceTree = "<group>"; };
+>>>>>>> Stashed changes
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -708,6 +718,7 @@
 				1255543819C0A00E00EC663C /* SoundPlayHelper.swift */,
 				1255543A19C0C3B100EC663C /* DelayHelper.swift */,
 				1255542F19C09C9E00EC663C /* StateMachine.swift */,
+				ACC30FD01C947DE7000CBDA6 /* ScoreHelper.swift */,
 			);
 			name = TSTUtils;
 			path = Classes/TSTUtils;
@@ -1825,6 +1836,7 @@
 				1293CD6719C08A25006A0E25 /* CCParticleExamples.m in Sources */,
 				1293CD3319C08A25006A0E25 /* CCConfiguration.m in Sources */,
 				1293CE3819C08A26006A0E25 /* ALContext.m in Sources */,
+				ACC30FD11C947DE7000CBDA6 /* ScoreHelper.swift in Sources */,
 				1293CD1219C08A25006A0E25 /* CCActionCatmullRom.m in Sources */,
 				1293CDA419C08A25006A0E25 /* CCSpriteFrameCache.m in Sources */,
 				1293CD2F19C08A25006A0E25 /* CCClippingNode.m in Sources */,
