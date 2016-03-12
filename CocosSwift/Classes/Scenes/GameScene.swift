@@ -12,18 +12,20 @@ class GameScene: CCScene {
 	private let screenSize:CGSize = CCDirector.sharedDirector().viewSize()
     private let bg:CCSprite = CCSprite(imageNamed: "bgCenario-ipad.png")
     private var energyBar = CCSprite(imageNamed: "energiaVerde-ipad.png")
-    
     private var player:Player = Player(imageNamed: "player-ipad.png")
     private var score:CCLabelTTF = CCLabelTTF(string: "Score:", fontName: "Times new Roman", fontSize: 30.0)
-	
-	// MARK: - Life Cycle
+	private var canPlay:Bool = true
+    private var canTap:Bool = true
+    
 	override init() {
 		super.init()
         
+        //Background
         bg.position = CGPointMake(self.screenSize.width, self.screenSize.height)
         bg.anchorPoint = CGPointMake(1.0, 1.0)
         self.addChild(bg)
         
+        //Barra de energia
         energyBar.position = CGPointMake(0.0, 0.0)
         energyBar.anchorPoint = CGPointMake(0.0, 0.0)
         self.addChild(energyBar)
@@ -59,7 +61,7 @@ class GameScene: CCScene {
         //Habilita o toque na tela
         self.userInteractionEnabled = true
         
-        createEnemys()
+        DelayHelper.sharedInstance.callFunc("createEnemys", onTarget: self, withDelay: 0.5)
         
 	}
     
@@ -138,13 +140,10 @@ class GameScene: CCScene {
     
     //Calcula a velocidade do machado
     func getVelocity(finalPointX:CGFloat) -> CCTime {
-        
         let defaultTime:CGFloat = 2.0
         let defaultWidth:CGFloat = self.screenSize.width
         let velocity:CGFloat = (defaultTime * finalPointX) / defaultWidth
-        
         let finalVelocity:CCTime = CCTime(velocity)
-        
         return finalVelocity
     
     }
@@ -152,22 +151,28 @@ class GameScene: CCScene {
     //Cria aleatoriamente os inimigos
     func createEnemys(){
         
-        let enemyIndex:Int = Int(arc4random_uniform(10))
-        
-        if(enemyIndex <= 7){
+        if (self.canPlay) {
             
-            var enemy:Enemy = self.createEnemyWithAnimation(10001, plistName: "PirataPerneta-ipad.plist", textureFile: "PirataPerneta-ipad.png")
-            self.addChild(enemy)
+            let enemyAmount:Int = Int(arc4random_uniform(1) + 1)
             
-        }else{
+            for (var i = 0; i < enemyAmount; i++) {
+                
+                let enemyIndex:Int = Int(arc4random_uniform(10))
+                if(enemyIndex <= 7){
+                    let enemy:Enemy = self.createEnemyWithAnimation(10001, plistName: "PirataPerneta-ipad.plist", textureFile: "PirataPerneta-ipad.png", enemyLife: 3.0, enemySpeed: 6.0)
+                    self.addChild(enemy)
+                }else{
+                    let enemy:Enemy = self.createEnemyWithAnimation(20001, plistName: "PirataPeixe-ipad.plist", textureFile: "PirataPeixe-ipad.png", enemyLife: 7.0, enemySpeed: 3.0)
+                    self.addChild(enemy)
+                }
+            }
             
-            var enemy:Enemy = self.createEnemyWithAnimation(20001, plistName: "PirataPeixe-ipad.plist", textureFile: "PirataPeixe-ipad.png")
-            self.addChild(enemy)
-            
+            DelayHelper.sharedInstance.callFunc("createEnemys", onTarget: self, withDelay: 1.0)
         }
     }
     
-    func createEnemyWithAnimation(indexImage:Int, plistName:String, textureFile:String) -> Enemy{
+    //Cria os inimigos com animacao e movimentacao
+    func createEnemyWithAnimation(indexImage:Int, plistName:String, textureFile:String, enemyLife:CGFloat, enemySpeed:CGFloat) -> Enemy{
         
         CCSpriteFrameCache.sharedSpriteFrameCache().addSpriteFramesWithFile(plistName, textureFilename: textureFile)
         var animFrames:Array<CCSpriteFrame> = Array()
@@ -184,6 +189,8 @@ class GameScene: CCScene {
         let actionForever:CCActionRepeatForever = CCActionRepeatForever(action: animationAction)
         let ccFrameName:CCSpriteFrame = CCSpriteFrame.frameWithImageNamed("Pirata \(indexImage).png") as! CCSpriteFrame
         let enemy:Enemy = Enemy.spriteWithSpriteFrame(ccFrameName) as! Enemy
+        enemy.life = enemyLife
+        enemy.speed = enemySpeed
         
         //Cria o ponto Y aleatorio
         let minScreenY:CGFloat = enemy.boundingBox().size.height
@@ -192,10 +199,10 @@ class GameScene: CCScene {
         
         //Cria o movimento
         let finalPoint:CGPoint = CGPointMake(0.0, yPosition)
-        let moveTo:CCAction = CCActionMoveTo.actionWithDuration(6.0, position: finalPoint) as! CCAction
+        let moveTo:CCAction = CCActionMoveTo.actionWithDuration(CCTime(enemy.speed), position: finalPoint) as! CCAction
         
         //Atribui os valores ao enemy
-        enemy.position = CGPointMake(512.0, yPosition)
+        enemy.position = CGPointMake(self.screenSize.width, yPosition)
         enemy.anchorPoint = CGPointMake(0.5, 0.5)
         enemy.runAction(actionForever)
         enemy.runAction(moveTo)
