@@ -11,9 +11,9 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
 
     var physicsWorld:CCPhysicsNode = CCPhysicsNode()
 	let screenSize:CGSize = CCDirector.sharedDirector().viewSize()
-    let bg:CCSprite = CCSprite(imageNamed: "bgCenario-ipad.png")
-    var energyBar = CCSprite(imageNamed: "energiaVerde-ipad.png")
-    var player:Player = Player(imageNamed: "player-ipad.png")
+    let bg:CCSprite = CCSprite(imageNamed: "bgCenario.png")
+    var energyBar = CCSprite(imageNamed: "energiaVerde.png")
+    var player:Player = Player(imageNamed: "player.png")
     var score:CCLabelTTF = CCLabelTTF(string: "Score:", fontName: "Times new Roman", fontSize: 30.0)
     var scoreValue:Int = 0
 	var canPlay:Bool = true
@@ -110,8 +110,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         let moveTo:CCAction = CCActionMoveTo.actionWithDuration(velocity, position: finalPoint) as! CCAction
         
         //Cria o machado e adiciona as acoes
-        let axe:Axe = Axe(imageNamed: "tiro-ipad.png", andDamage: 2.0)
-        axe.name = "Axe"
+        let axe:Axe = Axe(imageNamed: "tiro.png", andDamage: 2.0)
         axe.position = self.player.position
         axe.runAction(rotate)
         axe.runAction(CCActionSequence.actionOne(moveTo as! CCActionFiniteTime, two: CCActionCallBlock.actionWithBlock({ _ in
@@ -168,9 +167,9 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
                 
                 let enemyIndex:Int = Int(arc4random_uniform(10))
                 if(enemyIndex <= 7){
-                    self.createEnemyWithAnimation(10001, plistName: "PirataPerneta-ipad.plist", textureFile: "PirataPerneta-ipad.png", enemyLife: 3.0, enemySpeed: 6.0)
+                    self.createEnemyWithAnimation(10001, plistName: "PirataPerneta.plist", textureFile: "PirataPerneta.png", enemyLife: 3.0, enemySpeed: 6.0)
                 }else{
-                    self.createEnemyWithAnimation(20001, plistName: "PirataPeixe-ipad.plist", textureFile: "PirataPeixe-ipad.png", enemyLife: 7.0, enemySpeed: 3.0)
+                    self.createEnemyWithAnimation(20001, plistName: "PirataPeixe.plist", textureFile: "PirataPeixe.png", enemyLife: 7.0, enemySpeed: 3.0)
                 }
             }
             
@@ -198,6 +197,15 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         let enemy:Enemy = Enemy.spriteWithSpriteFrame(ccFrameName) as! Enemy
         enemy.life = enemyLife
         enemy.speed = enemySpeed
+        enemy.physicsBody = CCPhysicsBody(rect: CGRectMake(0, 0, self.contentSize.width, self.contentSize.height), cornerRadius: 0.0)
+        enemy.physicsBody.type = CCPhysicsBodyType.Kinematic
+        enemy.physicsBody.friction = 1.0
+        enemy.physicsBody.elasticity = 0.1
+        enemy.physicsBody.mass = 100.0
+        enemy.physicsBody.density = 100.0
+        enemy.physicsBody.collisionType = "Enemy"
+        enemy.physicsBody.collisionCategories = ["Enemy"]
+        enemy.physicsBody.collisionMask = ["Axe"]
         
         //Cria o ponto Y aleatorio
         let minScreenY:CGFloat = enemy.boundingBox().size.height
@@ -223,8 +231,14 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, Axe anAxe:Axe!, Enemy anEnemy:Enemy!) -> Bool {
         
+        anEnemy.life -= anAxe.damage
+    
+        //Remove o machado da tela
+        anAxe.removeFromParentAndCleanup(true)
         
-        anEnemy.removeFromParentAndCleanup(true)
+        if(0 >= anEnemy.life){
+             anEnemy.removeFromParentAndCleanup(true)
+        }
         return true
     }
     
