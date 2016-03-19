@@ -14,8 +14,11 @@ class GameScene: CCScene {
     private var energyBar = CCSprite(imageNamed: "energiaVerde-ipad.png")
     private var player:Player = Player(imageNamed: "player-ipad.png")
     private var score:CCLabelTTF = CCLabelTTF(string: "Score:", fontName: "Times new Roman", fontSize: 30.0)
+    private var scoreValue:Int = 0
 	private var canPlay:Bool = true
     private var canTap:Bool = true
+    private var enemyAmount:Int = 1
+    private var enemyDelay:Int = 3
     
 	override init() {
 		super.init()
@@ -106,7 +109,9 @@ class GameScene: CCScene {
         axe.position = self.player.position
         self.addChild(axe)
         axe.runAction(rotate)
-        axe.runAction(moveTo)
+        axe.runAction(CCActionSequence.actionOne(moveTo as! CCActionFiniteTime, two: CCActionCallBlock.actionWithBlock({ _ in
+            axe.removeFromParentAndCleanup(true)
+        }) as! CCActionFiniteTime) as! CCAction)
     }
     
     //Calcula o ponto final do machado
@@ -153,26 +158,22 @@ class GameScene: CCScene {
         
         if (self.canPlay) {
             
-            let enemyAmount:Int = Int(arc4random_uniform(1) + 1)
-            
-            for (var i = 0; i < enemyAmount; i++) {
+            for (var i = 0; i < self.enemyAmount; i++) {
                 
                 let enemyIndex:Int = Int(arc4random_uniform(10))
                 if(enemyIndex <= 7){
-                    let enemy:Enemy = self.createEnemyWithAnimation(10001, plistName: "PirataPerneta-ipad.plist", textureFile: "PirataPerneta-ipad.png", enemyLife: 3.0, enemySpeed: 6.0)
-                    self.addChild(enemy)
+                    self.createEnemyWithAnimation(10001, plistName: "PirataPerneta-ipad.plist", textureFile: "PirataPerneta-ipad.png", enemyLife: 3.0, enemySpeed: 6.0)
                 }else{
-                    let enemy:Enemy = self.createEnemyWithAnimation(20001, plistName: "PirataPeixe-ipad.plist", textureFile: "PirataPeixe-ipad.png", enemyLife: 7.0, enemySpeed: 3.0)
-                    self.addChild(enemy)
+                    self.createEnemyWithAnimation(20001, plistName: "PirataPeixe-ipad.plist", textureFile: "PirataPeixe-ipad.png", enemyLife: 7.0, enemySpeed: 3.0)
                 }
             }
             
-            DelayHelper.sharedInstance.callFunc("createEnemys", onTarget: self, withDelay: 1.0)
+            DelayHelper.sharedInstance.callFunc("createEnemys", onTarget: self, withDelay: 3.0)
         }
     }
     
     //Cria os inimigos com animacao e movimentacao
-    func createEnemyWithAnimation(indexImage:Int, plistName:String, textureFile:String, enemyLife:CGFloat, enemySpeed:CGFloat) -> Enemy{
+    func createEnemyWithAnimation(indexImage:Int, plistName:String, textureFile:String, enemyLife:CGFloat, enemySpeed:CGFloat){
         
         CCSpriteFrameCache.sharedSpriteFrameCache().addSpriteFramesWithFile(plistName, textureFilename: textureFile)
         var animFrames:Array<CCSpriteFrame> = Array()
@@ -201,13 +202,17 @@ class GameScene: CCScene {
         let finalPoint:CGPoint = CGPointMake(0.0, yPosition)
         let moveTo:CCAction = CCActionMoveTo.actionWithDuration(CCTime(enemy.speed), position: finalPoint) as! CCAction
         
+        
         //Atribui os valores ao enemy
         enemy.position = CGPointMake(self.screenSize.width, yPosition)
         enemy.anchorPoint = CGPointMake(0.5, 0.5)
         enemy.runAction(actionForever)
-        enemy.runAction(moveTo)
         
-        return enemy
+        self.addChild(enemy)
+        enemy.runAction(CCActionSequence.actionOne(moveTo as! CCActionFiniteTime, two: CCActionCallBlock.actionWithBlock({ _ in
+            	enemy.removeFromParentAndCleanup(true)
+            }) as! CCActionFiniteTime) as! CCAction)
+        
     }
     
     
