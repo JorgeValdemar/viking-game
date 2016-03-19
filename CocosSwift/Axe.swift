@@ -28,7 +28,7 @@ class Axe : CCSprite {
         self.physicsBody.density = 100.0
         self.physicsBody.collisionType = "Axe"
         self.physicsBody.collisionCategories = ["Axe"]
-        self.physicsBody.collisionMask = ["PirataPerneta", "PirataPeixe"]
+        self.physicsBody.collisionMask = ["Enemy"]
     }
     
     override init() {
