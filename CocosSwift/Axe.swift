@@ -6,20 +6,16 @@
 //  Copyright © 2016 Flameworks. All rights reserved.
 //
 
-import Foundation
-
-import Foundation
+import UIKit
 
 class Axe : CCSprite {
     
     var damage:CGFloat = 0.0
     
     convenience init(imageNamed imageName: String!, andDamage:CGFloat){
-        
         self.init(imageNamed: imageName)
         self.damage = andDamage
-        
-        // Configuracoes default
+        self.rotation = 180.0
         self.physicsBody = CCPhysicsBody(rect: CGRectMake(0, 0, self.contentSize.width, self.contentSize.height), cornerRadius: 0.0)
         self.physicsBody.type = CCPhysicsBodyType.Kinematic
         self.physicsBody.friction = 1.0

@@ -7,36 +7,42 @@
 //
 import Foundation
 
-class GameScene: CCScene {
+class GameScene: CCScene, CCPhysicsCollisionDelegate {
 
-	private let screenSize:CGSize = CCDirector.sharedDirector().viewSize()
-    private let bg:CCSprite = CCSprite(imageNamed: "bgCenario-ipad.png")
-    private var energyBar = CCSprite(imageNamed: "energiaVerde-ipad.png")
-    private var player:Player = Player(imageNamed: "player-ipad.png")
-    private var score:CCLabelTTF = CCLabelTTF(string: "Score:", fontName: "Times new Roman", fontSize: 30.0)
-    private var scoreValue:Int = 0
-	private var canPlay:Bool = true
-    private var canTap:Bool = true
-    private var enemyAmount:Int = 1
-    private var enemyDelay:Int = 3
+    var physicsWorld:CCPhysicsNode = CCPhysicsNode()
+	let screenSize:CGSize = CCDirector.sharedDirector().viewSize()
+    let bg:CCSprite = CCSprite(imageNamed: "bgCenario-ipad.png")
+    var energyBar = CCSprite(imageNamed: "energiaVerde-ipad.png")
+    var player:Player = Player(imageNamed: "player-ipad.png")
+    var score:CCLabelTTF = CCLabelTTF(string: "Score:", fontName: "Times new Roman", fontSize: 30.0)
+    var scoreValue:Int = 0
+	var canPlay:Bool = true
+    var canTap:Bool = true
+    var enemyAmount:Int = 1
+    var enemyDelay:Int = 3
     
 	override init() {
 		super.init()
         
+        // Define o mundo
+        self.physicsWorld.gravity = CGPointZero
+        self.physicsWorld.collisionDelegate = self
+        self.addChild(self.physicsWorld)
+        
         //Background
         bg.position = CGPointMake(self.screenSize.width, self.screenSize.height)
         bg.anchorPoint = CGPointMake(1.0, 1.0)
-        self.addChild(bg)
+        self.physicsWorld.addChild(bg)
         
         //Barra de energia
         energyBar.position = CGPointMake(0.0, 0.0)
         energyBar.anchorPoint = CGPointMake(0.0, 0.0)
-        self.addChild(energyBar)
+        self.physicsWorld.addChild(energyBar)
         
         //Posicionando o Viking
         player.anchorPoint = CGPointMake(0.0, 0.0)
         player.position = CGPointMake(0, self.screenSize.height/2)
-        self.addChild(player)
+        self.physicsWorld.addChild(player)
         
         // Back button
         let backButton:CCButton = CCButton(title: "[ Quit ]", fontName: "Verdana-Bold", fontSize: 26.0)
@@ -45,7 +51,7 @@ class GameScene: CCScene {
         backButton.color = CCColor.blackColor()
         backButton.zoomWhenHighlighted = false
         backButton.block = {_ in StateMachine.sharedInstance.changeScene(StateMachineScenes.HomeScene, isFade:true)}
-        self.addChild(backButton)
+        self.physicsWorld.addChild(backButton)
         
         // Pause button
         let pauseButton:CCButton = CCButton(title: "[ Pause ]", fontName: "Verdana-Bold", fontSize: 26.0)
@@ -53,13 +59,13 @@ class GameScene: CCScene {
         pauseButton.anchorPoint = CGPointMake(1.0, 1.0)
         pauseButton.color = CCColor.blackColor()
         pauseButton.zoomWhenHighlighted = false
-        self.addChild(pauseButton)
+        self.physicsWorld.addChild(pauseButton)
         
 		//Score label
 		score.color = CCColor.blackColor()
         score.position = CGPointMake(self.screenSize.width/2, self.screenSize.height-10)
 		score.anchorPoint = CGPointMake(1.0, 1.0)
-		self.addChild(score)
+		self.physicsWorld.addChild(score)
         
         //Habilita o toque na tela
         self.userInteractionEnabled = true
@@ -104,14 +110,14 @@ class GameScene: CCScene {
         let moveTo:CCAction = CCActionMoveTo.actionWithDuration(velocity, position: finalPoint) as! CCAction
         
         //Cria o machado e adiciona as acoes
-        let axe:Axe = Axe(imageNamed: "tiro-ipad.png", andDamage: 1.0)
+        let axe:Axe = Axe(imageNamed: "tiro-ipad.png", andDamage: 2.0)
         axe.name = "Axe"
         axe.position = self.player.position
-        self.addChild(axe)
         axe.runAction(rotate)
         axe.runAction(CCActionSequence.actionOne(moveTo as! CCActionFiniteTime, two: CCActionCallBlock.actionWithBlock({ _ in
             axe.removeFromParentAndCleanup(true)
         }) as! CCActionFiniteTime) as! CCAction)
+        self.physicsWorld.addChild(axe, z:ObjectsLayers.Shot.rawValue)
     }
     
     //Calcula o ponto final do machado
@@ -208,11 +214,18 @@ class GameScene: CCScene {
         enemy.anchorPoint = CGPointMake(0.5, 0.5)
         enemy.runAction(actionForever)
         
-        self.addChild(enemy)
+        self.physicsWorld.addChild(enemy, z:ObjectsLayers.Foes.rawValue)
         enemy.runAction(CCActionSequence.actionOne(moveTo as! CCActionFiniteTime, two: CCActionCallBlock.actionWithBlock({ _ in
             	enemy.removeFromParentAndCleanup(true)
             }) as! CCActionFiniteTime) as! CCAction)
+    }
+    
+    
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, Axe anAxe:Axe!, Enemy anEnemy:Enemy!) -> Bool {
         
+        
+        anEnemy.removeFromParentAndCleanup(true)
+        return true
     }
     
     
