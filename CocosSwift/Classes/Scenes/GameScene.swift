@@ -14,7 +14,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     let bg:CCSprite = CCSprite(imageNamed: "bgCenario.png")
     var energyBar = CCSprite(imageNamed: "energiaVerde.png")
     var player:Player = Player(imageNamed: "player.png")
-    var score:CCLabelTTF = CCLabelTTF(string: "Score:", fontName: "Times new Roman", fontSize: 30.0)
+    var score:CCLabelTTF = CCLabelTTF(string: "Score: 0", fontName: "Times new Roman", fontSize: 30.0)
     var scoreValue:Int = 0
 	var canPlay:Bool = true
     var canTap:Bool = true
@@ -228,18 +228,37 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
             }) as! CCActionFiniteTime) as! CCAction)
     }
     
-    
+    //Controle da colisao entre o machado e os piratas inimigos
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, Axe anAxe:Axe!, Enemy anEnemy:Enemy!) -> Bool {
         
         anEnemy.life -= anAxe.damage
-    
+        
+        if(0 >= anEnemy.life){
+            SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXPuf)
+            self.createParticle(anEnemy.position)
+            anEnemy.removeFromParentAndCleanup(true)
+        }
+        
         //Remove o machado da tela
         anAxe.removeFromParentAndCleanup(true)
         
-        if(0 >= anEnemy.life){
-             anEnemy.removeFromParentAndCleanup(true)
-        }
         return true
+    }
+    
+    //Cria as particulas
+    func createParticle(position:CGPoint){
+        var particle:CCParticleSystem = CCParticleExplosion(totalParticles: 3)
+        particle.texture = CCSprite.spriteWithImageNamed("fire.png").texture
+        particle.color = CCColor.redColor()
+        particle.startColor = CCColor.redColor()
+        particle.endColor = CCColor.redColor()
+        particle.position = position
+        particle.autoRemoveOnFinish = true
+        self.addChild(particle, z:ObjectsLayers.Player.rawValue)
+    }
+    
+    func powerUp(){
+    
     }
     
     
