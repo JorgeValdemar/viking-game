@@ -232,6 +232,9 @@
 		AC7428D91C8B1B0500F9E396 /* Axe.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7428D81C8B1B0500F9E396 /* Axe.swift */; };
 		AC9BF1D21C94852D00B78FD7 /* ScoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC9BF1D11C94852D00B78FD7 /* ScoreHelper.swift */; };
 		ACED97341C94672D0000BD7C /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACED97331C94672D0000BD7C /* Enemy.swift */; };
+		DD28C6031C9DA8A6001F5D8E /* EnergyBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD28C6021C9DA8A6001F5D8E /* EnergyBar.swift */; };
+		DD28C6051C9DC8DD001F5D8E /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD28C6041C9DC8DD001F5D8E /* PowerUp.swift */; };
+		DD298CC51C9D079E00B9B4BE /* Layers.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD298CC41C9D079E00B9B4BE /* Layers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -667,6 +670,9 @@
 		AC7428D81C8B1B0500F9E396 /* Axe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Axe.swift; sourceTree = "<group>"; };
 		AC9BF1D11C94852D00B78FD7 /* ScoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreHelper.swift; sourceTree = "<group>"; };
 		ACED97331C94672D0000BD7C /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
+		DD28C6021C9DA8A6001F5D8E /* EnergyBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnergyBar.swift; sourceTree = "<group>"; };
+		DD28C6041C9DC8DD001F5D8E /* PowerUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
+		DD298CC41C9D079E00B9B4BE /* Layers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -711,6 +717,7 @@
 				1255543A19C0C3B100EC663C /* DelayHelper.swift */,
 				1255542F19C09C9E00EC663C /* StateMachine.swift */,
 				AC9BF1D11C94852D00B78FD7 /* ScoreHelper.swift */,
+				DD298CC41C9D079E00B9B4BE /* Layers.swift */,
 			);
 			name = TSTUtils;
 			path = Classes/TSTUtils;
@@ -1597,6 +1604,8 @@
 				AC7428D41C8B1A2400F9E396 /* Player.swift */,
 				AC7428D81C8B1B0500F9E396 /* Axe.swift */,
 				ACED97331C94672D0000BD7C /* Enemy.swift */,
+				DD28C6021C9DA8A6001F5D8E /* EnergyBar.swift */,
+				DD28C6041C9DC8DD001F5D8E /* PowerUp.swift */,
 			);
 			name = Sprites;
 			sourceTree = "<group>";
@@ -1752,6 +1761,7 @@
 				1293CDD419C08A26006A0E25 /* UITouch+CC.m in Sources */,
 				1293CE6E19C08A26006A0E25 /* CCButton.m in Sources */,
 				1293CD6019C08A25006A0E25 /* CCParallaxNode.m in Sources */,
+				DD28C6051C9DC8DD001F5D8E /* PowerUp.swift in Sources */,
 				1255542319C08DC000EC663C /* Main.swift in Sources */,
 				1293CDF319C08A26006A0E25 /* ccUtils.c in Sources */,
 				AC9BF1D21C94852D00B78FD7 /* ScoreHelper.swift in Sources */,
@@ -1779,6 +1789,7 @@
 				1293CD0F19C08A25006A0E25 /* CCAction.m in Sources */,
 				1293CE4919C08A26006A0E25 /* ALWrapper.m in Sources */,
 				1293CE9319C08A26006A0E25 /* CCBsequence.m in Sources */,
+				DD298CC51C9D079E00B9B4BE /* Layers.swift in Sources */,
 				1293CE7E19C08A26006A0E25 /* CCTableView.m in Sources */,
 				1293CD4D19C08A25006A0E25 /* CCLayout.m in Sources */,
 				1293CD7D19C08A25006A0E25 /* CCPhysicsShape.m in Sources */,
@@ -1787,6 +1798,7 @@
 				1293CD9819C08A25006A0E25 /* CCSprite.m in Sources */,
 				1255543719C09CD200EC663C /* LoadingScene.swift in Sources */,
 				1293CE2019C08A26006A0E25 /* OALAudioTrack.m in Sources */,
+				DD28C6031C9DA8A6001F5D8E /* EnergyBar.swift in Sources */,
 				1293CE6119C08A26006A0E25 /* NSMutableDictionary+WeakReferences.m in Sources */,
 				12F88AE919DDA1D20001531E /* CCEffectSaturation.m in Sources */,
 				1293CD1F19C08A25006A0E25 /* CCActionManager.m in Sources */,
