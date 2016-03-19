@@ -19,8 +19,14 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
 	var canPlay:Bool = true
     var canTap:Bool = true
     var powerUp:Bool = false
+    var isPaused:Bool = false
     var enemyAmount:Int = 1
     var enemyDelay:Int = 3
+    let labelPaused:CCLabelTTF = CCLabelTTF(string:"== Paused ==", fontName:"Times New Roman", fontSize:50.0)
+    let labelPaused2:CCLabelTTF = CCLabelTTF(string:"Tap to resume", fontName:"Times New Roman", fontSize:40.0)
+    let backButton:CCButton = CCButton(title: "[ Quit ]", fontName: "Verdana-Bold", fontSize: 26.0)
+    let pauseButton:CCButton = CCButton(title: "[ Pause ]", fontName: "Verdana-Bold", fontSize: 26.0)
+    var powerUpTime:Int = 10
     
 	override init() {
 		super.init()
@@ -41,25 +47,30 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         self.physicsWorld.addChild(energyBar)
         
         //Posicionando o Viking
-        player.anchorPoint = CGPointMake(0.0, 0.0)
-        player.position = CGPointMake(0, self.screenSize.height/2)
+        self.player.anchorPoint = CGPointMake(0.0, 0.0)
+        self.player.position = CGPointMake(0, self.screenSize.height/2)
         self.physicsWorld.addChild(player)
         
         // Back button
-        let backButton:CCButton = CCButton(title: "[ Quit ]", fontName: "Verdana-Bold", fontSize: 26.0)
-        backButton.position = CGPointMake(self.screenSize.width-10, self.screenSize.height-10)
-        backButton.anchorPoint = CGPointMake(1.0, 1.0)
-        backButton.color = CCColor.blackColor()
-        backButton.zoomWhenHighlighted = false
-        backButton.block = {_ in StateMachine.sharedInstance.changeScene(StateMachineScenes.HomeScene, isFade:true)}
+        self.backButton.position = CGPointMake(self.screenSize.width-10, self.screenSize.height-10)
+        self.backButton.anchorPoint = CGPointMake(1.0, 1.0)
+        self.backButton.color = CCColor.blackColor()
+        self.backButton.zoomWhenHighlighted = false
+        self.backButton.block = {_ in
+            SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXButtonTap)
+            StateMachine.sharedInstance.changeScene(StateMachineScenes.HomeScene, isFade:true)
+        }
         self.physicsWorld.addChild(backButton)
         
         // Pause button
-        let pauseButton:CCButton = CCButton(title: "[ Pause ]", fontName: "Verdana-Bold", fontSize: 26.0)
-        pauseButton.position = CGPointMake(self.screenSize.width-130, self.screenSize.height-10)
-        pauseButton.anchorPoint = CGPointMake(1.0, 1.0)
-        pauseButton.color = CCColor.blackColor()
-        pauseButton.zoomWhenHighlighted = false
+        self.pauseButton.position = CGPointMake(self.screenSize.width-130, self.screenSize.height-10)
+        self.pauseButton.anchorPoint = CGPointMake(1.0, 1.0)
+        self.pauseButton.color = CCColor.blackColor()
+        self.pauseButton.zoomWhenHighlighted = false
+        self.pauseButton.block = {_ in
+            SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXButtonTap)
+            self.pauseGame()
+        }
         self.physicsWorld.addChild(pauseButton)
         
 		//Score label
@@ -67,6 +78,20 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         scoreLabel.position = CGPointMake(self.screenSize.width/2, self.screenSize.height-10)
 		scoreLabel.anchorPoint = CGPointMake(1.0, 1.0)
 		self.physicsWorld.addChild(scoreLabel)
+        
+        //Labels para pause
+        self.labelPaused.color = CCColor.redColor()
+        self.labelPaused.position = CGPointMake(self.screenSize.width/2, self.screenSize.height/2)
+        self.labelPaused.anchorPoint = CGPointMake(0.5, 0.5)
+        self.labelPaused.visible = false
+        
+        self.labelPaused2.color = CCColor.redColor()
+        self.labelPaused2.position = CGPointMake(self.screenSize.width/2, (self.screenSize.height/2) - 50)
+        self.labelPaused2.anchorPoint = CGPointMake(0.5, 0.5)
+        self.labelPaused2.visible = false
+        
+        self.addChild(self.labelPaused, z: 4)
+        self.addChild(self.labelPaused2, z: 4)
         
         //Habilita o toque na tela
         self.userInteractionEnabled = true
@@ -80,8 +105,17 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
             let touchLocation:CGPoint = CCDirector.sharedDirector().convertTouchToGL(touch)
             self.createAxe(touchLocation)
         }else{
-            SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXButtonTap)
-            StateMachine.sharedInstance.changeScene(StateMachineScenes.HomeScene, isFade: true)
+            
+            if(self.isPaused){
+                self.labelPaused.visible = false
+                self.labelPaused2.visible = false
+                self.isPaused = false
+                self.canPlay = true
+                CCDirector.sharedDirector().resume()
+            }else{
+                SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXButtonTap)
+                StateMachine.sharedInstance.changeScene(StateMachineScenes.HomeScene, isFade: true)
+            }
         }
     }
     
@@ -92,15 +126,13 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
 	override func update(delta: CCTime) {
         
         if(self.canPlay){
-            if(50 == self.scoreValue){
-                self.enemyAmount = 3
-                self.enemyDelay = 2
-            }
+            self.increasingDifficulty()
         }
 	}
 
 	override func onExit() {
 		super.onExit()
+        CCTextureCache.sharedTextureCache().removeAllTextures()
 	}
     
     
@@ -274,6 +306,15 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         return true
     }
     
+    //Colisao entre o machado de Agnar e o PowerUp
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, Axe anAxe:Axe!, PowerUp aPowerUp:PowerUp!) -> Bool {
+        
+        aPowerUp.removeFromParentAndCleanup(true)
+
+
+        return true
+    }
+    
     //Cria as particulas
     func createParticle(position:CGPoint){
         var particle:CCParticleSystem = CCParticleExplosion(totalParticles: 3)
@@ -326,6 +367,22 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         
         self.addChild(label, z: 4)
         self.addChild(subLabel, z: 4)
+    }
+    
+    //Aumenta a dificuldade, fazendo a geracao de inimigos ficar mais rapida
+    func increasingDifficulty(){
+        if(50 == self.scoreValue){
+            self.enemyAmount = 3
+            self.enemyDelay = 2
+        }
+    }
+    
+    func pauseGame(){
+        self.labelPaused.visible = true
+        self.labelPaused2.visible = true
+        self.isPaused = true
+        self.canPlay = false
+        CCDirector.sharedDirector().pause()
     }
     
     

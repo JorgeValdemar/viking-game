@@ -57,7 +57,10 @@ class HomeScene : CCScene {
         toGameButton.color = CCColor.blackColor()
 		toGameButton.position = CGPointMake(self.screenSize.width/2.0, self.screenSize.height/2.0)
 		toGameButton.anchorPoint = CGPointMake(0.5, 0.5)
-		toGameButton.block = {_ in StateMachine.sharedInstance.changeScene(StateMachineScenes.GameScene, isFade:true)}
+		toGameButton.block = {_ in
+            SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXButtonTap)
+            StateMachine.sharedInstance.changeScene(StateMachineScenes.GameScene, isFade:true)
+        }
 		self.addChild(toGameButton)
         
         //Best Score
