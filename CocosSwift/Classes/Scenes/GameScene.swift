@@ -12,9 +12,9 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     var physicsWorld:CCPhysicsNode = CCPhysicsNode()
 	let screenSize:CGSize = CCDirector.sharedDirector().viewSize()
     let bg:CCSprite = CCSprite(imageNamed: "bgCenario.png")
-    var energyBar = CCSprite(imageNamed: "energiaVerde.png")
+    var energyBar = EnergyBar(imageNamed: "energiaVerde.png", life: 3.0)
     var player:Player = Player(imageNamed: "player.png")
-    var score:CCLabelTTF = CCLabelTTF(string: "Score: 0", fontName: "Times new Roman", fontSize: 30.0)
+    var scoreLabel:CCLabelTTF = CCLabelTTF(string: "Score: 0", fontName: "Times new Roman", fontSize: 30.0)
     var scoreValue:Int = 0
 	var canPlay:Bool = true
     var canTap:Bool = true
@@ -62,10 +62,10 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         self.physicsWorld.addChild(pauseButton)
         
 		//Score label
-		score.color = CCColor.blackColor()
-        score.position = CGPointMake(self.screenSize.width/2, self.screenSize.height-10)
-		score.anchorPoint = CGPointMake(1.0, 1.0)
-		self.physicsWorld.addChild(score)
+		scoreLabel.color = CCColor.blackColor()
+        scoreLabel.position = CGPointMake(self.screenSize.width/2, self.screenSize.height-10)
+		scoreLabel.anchorPoint = CGPointMake(1.0, 1.0)
+		self.physicsWorld.addChild(scoreLabel)
         
         //Habilita o toque na tela
         self.userInteractionEnabled = true
@@ -75,10 +75,13 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
 	}
     
     override func touchBegan(touch: UITouch!, withEvent event: UIEvent!) {
-        
-        let touchLocation:CGPoint = CCDirector.sharedDirector().convertTouchToGL(touch)
-        self.createAxe(touchLocation)
-        
+        if(self.canPlay){
+            let touchLocation:CGPoint = CCDirector.sharedDirector().convertTouchToGL(touch)
+            self.createAxe(touchLocation)
+        }else{
+            SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXButtonTap)
+            StateMachine.sharedInstance.changeScene(StateMachineScenes.HomeScene, isFade: true)
+        }
     }
     
 	override func onEnter() {
@@ -205,7 +208,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         enemy.physicsBody.density = 100.0
         enemy.physicsBody.collisionType = "Enemy"
         enemy.physicsBody.collisionCategories = ["Enemy"]
-        enemy.physicsBody.collisionMask = ["Axe"]
+        enemy.physicsBody.collisionMask = ["Axe", "EnergyBar"]
         
         //Cria o ponto Y aleatorio
         let minScreenY:CGFloat = enemy.boundingBox().size.height
@@ -237,10 +240,28 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
             SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXPuf)
             self.createParticle(anEnemy.position)
             anEnemy.removeFromParentAndCleanup(true)
+            self.updateScore()
+        }
+        anAxe.removeFromParentAndCleanup(true)
+        return true
+    }
+    
+    //Controle da colisao entre o machado e os piratas inimigos
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, EnergyBar energyBar:EnergyBar!, Enemy anEnemy:Enemy!) -> Bool {
+        
+        self.energyBar.life -= 1
+        
+        if(2 == self.energyBar.life){
+            self.energyBar.texture = EnergyBar.spriteWithImageNamed("energiaAmarela.png").texture
         }
         
-        //Remove o machado da tela
-        anAxe.removeFromParentAndCleanup(true)
+        else if(1 == self.energyBar.life){
+            self.energyBar.texture = EnergyBar.spriteWithImageNamed("energiaVermelha.png").texture
+        }
+            
+        else if(0 >= self.energyBar.life){
+            self.gameOver()
+        }
         
         return true
     }
@@ -257,8 +278,40 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         self.addChild(particle, z:ObjectsLayers.Player.rawValue)
     }
     
+    //Atualiza a pontuacao
+    func updateScore(){
+        self.scoreValue += 1
+        self.scoreLabel.string = "Score: \(self.scoreValue)"
+    }
+    
+    //Gera aleatoriamente o PowerUp
     func powerUp(){
     
+    }
+    
+    //Game over
+    func gameOver(){
+        self.canPlay = false
+        
+        // Cancela todas as acoes na cena
+        self.stopAllActions()
+        
+        // Registra o novo best score caso haja
+        ScoreHelper.sharedInstance.setScore(self.scoreValue)
+        
+        // Exibe o texto para retry
+        let label:CCLabelTTF = CCLabelTTF(string:"_== GAME OVER ==_", fontName:"Times New Roman", fontSize:60.0)
+        label.color = CCColor.redColor()
+        label.position = CGPointMake(self.screenSize.width/2, self.screenSize.height/2)
+        label.anchorPoint = CGPointMake(0.5, 0.5)
+        
+        let subLabel:CCLabelTTF = CCLabelTTF(string:"Tap to restart", fontName:"Times New Roman", fontSize:45.0)
+        subLabel.color = CCColor.redColor()
+        subLabel.position = CGPointMake(self.screenSize.width/2, (self.screenSize.height/2) - 55)
+        subLabel.anchorPoint = CGPointMake(0.5, 0.5)
+        
+        self.addChild(label, z: 4)
+        self.addChild(subLabel, z: 4)
     }
     
     

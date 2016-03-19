@@ -61,10 +61,14 @@ class HomeScene : CCScene {
 		self.addChild(toGameButton)
         
         //Best Score
-        let bestScore:CCLabelTTF = CCLabelTTF(string: "Best Socre", fontName: "Times New Roman", fontSize: 36.0)
+        let score:Int = ScoreHelper.sharedInstance.getScore()
+        let bestScore:CCLabelTTF = CCLabelTTF(string: "Best Score: \(score)", fontName: "Times New Roman", fontSize: 36.0)
         bestScore.color = CCColor.blackColor()
         bestScore.position = CGPointMake(self.screenSize.width/2, 50)
         bestScore.anchorPoint = CGPointMake(0.5, 0.5)
+        
+        SoundPlayHelper.sharedInstance.playMusicWithControl(GameMusicAndSoundFx.MusicInGame, withLoop: true)
+        
         self.addChild(bestScore)
 	}
 
@@ -72,15 +76,6 @@ class HomeScene : CCScene {
 		// Chamado apos o init quando entra no director
 		super.onEnter()
 	}
-
-	// MARK: - Private Methods
-//	func startTap(sender:AnyObject) {
-//		StateMachine.sharedInstance.changeScene(StateMachine.StateMachineScenes.GameScene, isFade:true)
-//	}
-
-	// MARK: - Public Methods
-
-	// MARK: - Delegates/Datasources
 
 	// MARK: - Death Cycle
 	override func onExit() {

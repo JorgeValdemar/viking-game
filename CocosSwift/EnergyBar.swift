@@ -1,14 +1,13 @@
 //
-//  Enemy.swift
+//  EnergyBar.swift
 //  CocosSwift
 //
-//  Created by Usuário Convidado on 12/03/16.
+//  Created by rsekine on 3/19/16.
 //  Copyright © 2016 Flameworks. All rights reserved.
 //
-class Enemy : CCSprite {
-
-    var life:CGFloat = 3.0
-    var speed:CGFloat = 7.0
+class EnergyBar : CCSprite {
+    
+    var life:CGFloat = 0.0
     
     override init() {
         super.init()
@@ -36,6 +35,20 @@ class Enemy : CCSprite {
     
     override init(imageNamed imageName: String!) {
         super.init(imageNamed: imageName)
+    }
+    
+    convenience init(imageNamed imageName: String!, life:CGFloat){
+        self.init(imageNamed: imageName)
+        self.life = life
+        self.physicsBody = CCPhysicsBody(rect: CGRectMake(0, 0, self.contentSize.width, self.contentSize.height), cornerRadius: 0.0)
+        self.physicsBody.type = CCPhysicsBodyType.Kinematic
+        self.physicsBody.friction = 1.0
+        self.physicsBody.elasticity = 0.1
+        self.physicsBody.mass = 100.0
+        self.physicsBody.density = 100.0
+        self.physicsBody.collisionType = "EnergyBar"
+        self.physicsBody.collisionCategories = ["EnergyBar"]
+        self.physicsBody.collisionMask = ["Enemy"]
     }
     
     override func onEnter() {
