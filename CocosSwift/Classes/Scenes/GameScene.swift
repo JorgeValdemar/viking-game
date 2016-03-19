@@ -18,6 +18,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     var scoreValue:Int = 0
 	var canPlay:Bool = true
     var canTap:Bool = true
+    var powerUp:Bool = false
     var enemyAmount:Int = 1
     var enemyDelay:Int = 3
     
@@ -89,7 +90,13 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
 	}
 
 	override func update(delta: CCTime) {
-
+        
+        if(self.canPlay){
+            if(50 == self.scoreValue){
+                self.enemyAmount = 3
+                self.enemyDelay = 2
+            }
+        }
 	}
 
 	override func onExit() {
@@ -239,6 +246,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         if(0 >= anEnemy.life){
             SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXPuf)
             self.createParticle(anEnemy.position)
+            self.generatePowerUp(anEnemy.position)
             anEnemy.removeFromParentAndCleanup(true)
             self.updateScore()
         }
@@ -285,8 +293,14 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     }
     
     //Gera aleatoriamente o PowerUp
-    func powerUp(){
+    func generatePowerUp(position:CGPoint){
     
+        let randomPower:Int = Int(arc4random_uniform(10))
+        if(!self.powerUp && 1 == randomPower){
+            let powerUp:PowerUp = PowerUp(imageNamed: "powerUP.png")
+            powerUp.position = position
+            self.physicsWorld.addChild(powerUp)
+        }
     }
     
     //Game over

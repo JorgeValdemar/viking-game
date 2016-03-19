@@ -1,13 +1,14 @@
 //
-//  Axe.swift
+//  PowerUp.swift
 //  CocosSwift
 //
-//  Created by Usuário Convidado on 05/03/16.
+//  Created by rsekine on 3/19/16.
 //  Copyright © 2016 Flameworks. All rights reserved.
 //
-class Axe : CCSprite {
-    
-    var damage:CGFloat = 0.0
+
+import Foundation
+
+class PowerUp : CCSprite {
     
     override init() {
         super.init()
@@ -35,21 +36,15 @@ class Axe : CCSprite {
     
     override init(imageNamed imageName: String!) {
         super.init(imageNamed: imageName)
-    }
-    
-    convenience init(imageNamed imageName: String!, andDamage:CGFloat){
-        self.init(imageNamed: imageName)
-        self.damage = andDamage
-        self.rotation = 180.0
         self.physicsBody = CCPhysicsBody(rect: CGRectMake(0, 0, self.contentSize.width, self.contentSize.height), cornerRadius: 0.0)
         self.physicsBody.type = CCPhysicsBodyType.Kinematic
         self.physicsBody.friction = 1.0
         self.physicsBody.elasticity = 0.1
         self.physicsBody.mass = 100.0
         self.physicsBody.density = 100.0
-        self.physicsBody.collisionType = "Axe"
-        self.physicsBody.collisionCategories = ["Axe"]
-        self.physicsBody.collisionMask = ["Enemy", "PowerUp"]
+        self.physicsBody.collisionType = "PowerUp"
+        self.physicsBody.collisionCategories = ["PowerUp"]
+        self.physicsBody.collisionMask = ["Axe"]
     }
     
     override func onEnter() {
