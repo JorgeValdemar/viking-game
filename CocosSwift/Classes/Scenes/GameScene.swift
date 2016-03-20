@@ -110,13 +110,15 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
             if(self.isPaused){
                 self.labelPaused.visible = false
                 self.labelPaused2.visible = false
+                self.pauseButton.visible = true
+                self.backButton.visible = true
                 self.isPaused = false
                 self.canPlay = true
                 CCDirector.sharedDirector().resume()
             }else{
-                SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXButtonTap)
                 StateMachine.sharedInstance.changeScene(StateMachineScenes.HomeScene, isFade: true)
             }
+            SoundPlayHelper.sharedInstance.playSoundWithControl(GameMusicAndSoundFx.SoundFXButtonTap)
         }
     }
     
@@ -399,6 +401,8 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     func pauseGame(){
         self.labelPaused.visible = true
         self.labelPaused2.visible = true
+        self.pauseButton.visible = false
+        self.backButton.visible = false
         self.isPaused = true
         self.canPlay = false
         CCDirector.sharedDirector().pause()
