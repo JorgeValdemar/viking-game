@@ -149,7 +149,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
             
             if(self.powerUpTime <= 0)
             {
-                self.powerUpTime = 10
+                self.powerUpTime = 60
                 self.powerUp = false
                 self.axeDamage = 1
                 self.player.color = CCColor(red: 255, green: 255, blue: 255, alpha: 0)
