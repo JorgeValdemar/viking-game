@@ -8,15 +8,15 @@
 import Foundation
 
 class GameScene: CCScene, CCPhysicsCollisionDelegate {
-
+    
     var physicsWorld:CCPhysicsNode = CCPhysicsNode()
-	let screenSize:CGSize = CCDirector.sharedDirector().viewSize()
+    let screenSize:CGSize = CCDirector.sharedDirector().viewSize()
     let bg:CCSprite = CCSprite(imageNamed: "bgCenario.png")
     var energyBar = EnergyBar(imageNamed: "energiaVerde.png", life: 3.0)
     var player:Player = Player(imageNamed: "player.png")
     var scoreLabel:CCLabelTTF = CCLabelTTF(string: "Score: 0", fontName: "Times new Roman", fontSize: 30.0)
     var scoreValue:Int = 0
-	var canPlay:Bool = true
+    var canPlay:Bool = true
     var canTap:Bool = true
     var powerUp:Bool = false
     var isPaused:Bool = false
@@ -26,10 +26,11 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     let labelPaused2:CCLabelTTF = CCLabelTTF(string:"Tap to resume", fontName:"Times New Roman", fontSize:40.0)
     let backButton:CCButton = CCButton(title: "[ Quit ]", fontName: "Verdana-Bold", fontSize: 26.0)
     let pauseButton:CCButton = CCButton(title: "[ Pause ]", fontName: "Verdana-Bold", fontSize: 26.0)
-    var powerUpTime:Int = 10
+    var powerUpTime:Int = 60
+    var axeDamage:CGFloat = 1
     
-	override init() {
-		super.init()
+    override init() {
+        super.init()
         
         // Define o mundo
         self.physicsWorld.gravity = CGPointZero
@@ -73,11 +74,11 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         }
         self.physicsWorld.addChild(pauseButton)
         
-		//Score label
-		scoreLabel.color = CCColor.blackColor()
+        //Score label
+        scoreLabel.color = CCColor.blackColor()
         scoreLabel.position = CGPointMake(self.screenSize.width/2, self.screenSize.height-10)
-		scoreLabel.anchorPoint = CGPointMake(1.0, 1.0)
-		self.physicsWorld.addChild(scoreLabel)
+        scoreLabel.anchorPoint = CGPointMake(1.0, 1.0)
+        self.physicsWorld.addChild(scoreLabel)
         
         //Labels para pause
         self.labelPaused.color = CCColor.redColor()
@@ -98,7 +99,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         
         DelayHelper.sharedInstance.callFunc("createEnemys", onTarget: self, withDelay: 0.5)
         
-	}
+    }
     
     override func touchBegan(touch: UITouch!, withEvent event: UIEvent!) {
         if(self.canPlay){
@@ -119,28 +120,46 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         }
     }
     
-	override func onEnter() {
-		super.onEnter()
-	}
-
-	override func update(delta: CCTime) {
+    override func onEnter() {
+        super.onEnter()
+    }
+    
+    override func update(delta: CCTime) {
         
         if(self.canPlay){
             self.increasingDifficulty()
+            DelayHelper.sharedInstance.callFunc("contadorPowerUp", onTarget: self, withDelay: 1.0)
         }
-	}
-
-	override func onExit() {
-		super.onExit()
+    }
+    
+    override func onExit() {
+        super.onExit()
         CCTextureCache.sharedTextureCache().removeAllTextures()
-	}
+    }
     
     
     //===================== CUSTOM FUNCTIONS =====================//
     
+    func contadorPowerUp()
+    {
+        if(self.powerUp)
+        {
+            self.powerUpTime--
+            print(self.powerUpTime)
+            
+            if(self.powerUpTime <= 0)
+            {
+                self.powerUpTime = 10
+                self.powerUp = false
+                self.axeDamage = 1
+                self.player.color = CCColor(red: 255, green: 255, blue: 255, alpha: 0)
+            }
+        }
+    }
+    
     //Cria o machado
     func createAxe(touchLocation: CGPoint){
-    
+        
         //Calcula o ponto final do machado
         let finalPoint:CGPoint = self.getFinalPoint(touchLocation)
         
@@ -152,7 +171,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         let moveTo:CCAction = CCActionMoveTo.actionWithDuration(velocity, position: finalPoint) as! CCAction
         
         //Cria o machado e adiciona as acoes
-        let axe:Axe = Axe(imageNamed: "tiro.png", andDamage: 2.0)
+        let axe:Axe = Axe(imageNamed: "tiro.png", andDamage: self.axeDamage)
         axe.position = self.player.position
         axe.runAction(rotate)
         axe.runAction(CCActionSequence.actionOne(moveTo as! CCActionFiniteTime, two: CCActionCallBlock.actionWithBlock({ _ in
@@ -197,7 +216,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         let velocity:CGFloat = (defaultTime * finalPointX) / defaultWidth
         let finalVelocity:CCTime = CCTime(velocity)
         return finalVelocity
-    
+        
     }
     
     //Cria aleatoriamente os inimigos
@@ -266,8 +285,8 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         
         self.physicsWorld.addChild(enemy, z:ObjectsLayers.Foes.rawValue)
         enemy.runAction(CCActionSequence.actionOne(moveTo as! CCActionFiniteTime, two: CCActionCallBlock.actionWithBlock({ _ in
-            	enemy.removeFromParentAndCleanup(true)
-            }) as! CCActionFiniteTime) as! CCAction)
+            enemy.removeFromParentAndCleanup(true)
+        }) as! CCActionFiniteTime) as! CCAction)
     }
     
     //Controle da colisao entre o machado e os piratas inimigos
@@ -294,7 +313,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         if(2 == self.energyBar.life){
             self.energyBar.texture = EnergyBar.spriteWithImageNamed("energiaAmarela.png").texture
         }
-        
+            
         else if(1 == self.energyBar.life){
             self.energyBar.texture = EnergyBar.spriteWithImageNamed("energiaVermelha.png").texture
         }
@@ -308,10 +327,10 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     
     //Colisao entre o machado de Agnar e o PowerUp
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, Axe anAxe:Axe!, PowerUp aPowerUp:PowerUp!) -> Bool {
-        
+        self.player.color = CCColor(red: 255, green: 0, blue: 0)
+        self.powerUp = true
+        self.axeDamage = 8
         aPowerUp.removeFromParentAndCleanup(true)
-
-
         return true
     }
     
@@ -335,7 +354,7 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
     
     //Gera aleatoriamente o PowerUp
     func generatePowerUp(position:CGPoint){
-    
+        
         let randomPower:Int = Int(arc4random_uniform(10))
         if(!self.powerUp && 1 == randomPower){
             let powerUp:PowerUp = PowerUp(imageNamed: "powerUP.png")
@@ -384,6 +403,5 @@ class GameScene: CCScene, CCPhysicsCollisionDelegate {
         self.canPlay = false
         CCDirector.sharedDirector().pause()
     }
-    
     
 }
